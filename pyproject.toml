@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "image-folder-shrink"
+version = "0.1.0"
+description = ""
+authors = ["semcit <semcit@nysbc.org>"]
+readme = "README.md"
+packages = [{include = "image_folder_shrink"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+numpy = "^1.24.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
