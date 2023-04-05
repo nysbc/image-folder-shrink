@@ -61,24 +61,32 @@ def runFileShrink(filepath):
 		return
 	fake_image = makeFakeImage(image_array)
 	mrc.write(fake_image, filepath)
-	print(('  %s is now shrunk to 8x8' % (filepath,)))
+	print('  %s is now shrunk to 8x8' % (filepath,))
 
 def folderShrink(folderpath):
+	cwd = os.getcwd()
 	if not os.path.isdir(folderpath):
 		print('Not a directory, bypassed')
 	dwmrcs = glob.glob(os.path.join(folderpath,'*DW.mrc'))
+	os.chdir(folderpath)
 	for dw in dwmrcs:
-		print(('Processing %s' % dw))
+		print('Processing %s' % dw)
+		# use relative path so that it does not lose the link if the directory
+		# is moved.
+		dw = os.path.basename(dw)
 		aligned = dw.replace('-DW.mrc','.mrc')
 		if os.path.isfile(aligned) and not os.path.islink(aligned):
 			os.remove(aligned)
 			os.symlink(dw, aligned)
-			print(('  %s is now linked to %s' % (aligned, dw)))
+			print('  %s is now linked to %s' % (aligned, dw))
 		raw = '-'.join(aligned.split('-')[:-1])+('.mrc')
 		if os.path.isfile(raw):
 			runFileShrink(raw)
+	# change back to working directory
+	os.chdir(cwd)
 
 if __name__=='__main__':
 	if len(sys.argv) != 2:
 		print('Usage: Provide a leginon image data folder name, please')
 	folderShrink(sys.argv[1])
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+set -u
+
+_file_=$(realpath "$0")
+root="$(dirname "$_file_")"
+
+# shellcheck source=/dev/null
+source "$root/.venv/bin/activate"
+
+python "$root"/image_folder_shrink_repair.py "$@"
